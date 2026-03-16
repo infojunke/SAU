@@ -1,0 +1,145 @@
+# Splunk App Updater Configuration
+# Copy this file to config.yaml and update with your settings
+
+# GitLab repository paths with environment and component metadata
+# Note: If your repos have nonprod/ and shared/ subdirectories, create separate entries for each
+gitlab_repos:
+  # Example: Deployment Server (forwarder configs)
+  - path: "C:/path/to/splunk-ds-config/nonprod"
+    environment: "non-prod"
+    component: "ds"
+  
+  - path: "C:/path/to/splunk-ds-config/shared"
+    environment: "shared"
+    component: "ds"
+  
+  # Example: Search Head Cluster (full apps with UI)
+  - path: "C:/path/to/splunk-sh-config/nonprod"
+    environment: "non-prod"
+    component: "shc"
+  
+  - path: "C:/path/to/splunk-sh-config/shared"
+    environment: "shared"
+    component: "shc"
+  
+  # Example: Cluster Manager (indexer configs)
+  - path: "C:/path/to/splunk-cm-config/nonprod"
+    environment: "non-prod"
+    component: "cm"
+  
+  - path: "C:/path/to/splunk-cm-config/shared"
+    environment: "shared"
+    component: "cm"
+
+# Optional: Add region metadata if you have multiple regions
+# - path: "C:/path/to/splunk-ds-config/nonprod"
+#   environment: "non-prod"
+#   region: "east"
+#   component: "ds"
+
+# Splunkbase credentials (required for downloading apps)
+splunkbase_credentials:
+  username: "your_username"
+  password: "your_password"
+
+# Optional: Map app names to Splunkbase IDs if not in app.conf
+splunkbase_id_mapping:
+  Splunk_TA_windows: "742"
+  Splunk_TA_nix: "833"
+  Splunk_TA_aws: "1876"
+  # Add more as needed
+
+# Working directories
+work_directory: "./work"
+manual_download_directory: "./manual_downloads"
+
+# GitLab configuration (optional - for MR URL generation)
+gitlab_config:
+  base_url: "https://gitlab.yourcompany.com"
+  default_target_branch: "main"
+
+# Deployment filtering configuration
+# These settings control which files are included for each component type
+deployment:
+  # Files excluded from ALL component types
+  # These are never needed in Splunk deployments
+  global_excludes:
+    - "*.rtf"
+
+  # Forwarders (DS repos) - data collection only
+  forwarder_dirs:
+    - "bin"
+    - "default"
+    - "metadata"
+  
+  forwarder_excludes:
+    - "local"
+    - "lookups"
+    - "samples"
+    - "static"
+    - "appserver"
+    - "default/data"
+    - "default/savedsearches.conf"
+    - "default/views"
+    - "default/dashboards"
+    - "default/nav"
+    - "default/macros.conf"
+    - "default/eventtypes.conf"
+    - "default/tags.conf"
+    - "default/datamodels"
+    - "default/indexes.conf"
+  
+  # Heavy Forwarders (HF repos) - forwarders with search capability
+  # Includes lookups, savedsearches, macros, eventtypes for search functionality
+  heavy_forwarder_excludes:
+    - "local"
+    - "samples"
+    - "static"
+    - "appserver"
+    - "default/data/ui"
+    - "default/views"
+    - "default/dashboards"
+    - "default/nav"
+    - "default/indexes.conf"
+  
+  # Indexers (CM repos) - index-time processing
+  indexer_dirs:
+    - "bin"
+    - "default"
+    - "metadata"
+  
+  indexer_excludes:
+    - "local"
+    - "lookups"
+    - "samples"
+    - "static"
+    - "appserver"
+    - "default/data"
+    - "default/savedsearches.conf"
+    - "default/views"
+    - "default/dashboards"
+    - "default/nav"
+    - "default/macros.conf"
+    - "default/eventtypes.conf"
+    - "default/tags.conf"
+    - "default/datamodels"
+    - "default/inputs.conf"
+  
+  # Search Heads (SHC repos) - full apps with knowledge objects
+  searchhead_excludes:
+    - "local"
+    - "samples"
+    - "default/inputs.conf"
+    - "default/indexes.conf"
+
+# Git settings
+git_settings:
+  auto_commit: true
+  auto_push: false  # Set to true to automatically push branches to remote after creating them
+  commit_message_template: "Update {app_name} from v{old_version} to v{new_version}"
+  branch_prefix: "update"
+
+# Logging configuration
+logging:
+  level: "INFO"
+  file: "splunk_app_updater.log"

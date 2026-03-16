@@ -1,0 +1,54 @@
+# Splunk App Updater - .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.Python
+env/
+venv/
+ENV/
+.venv
+
+# Work directory (downloads, extracts, backups)
+work/
+downloads/
+extracted/
+backups/
+
+# Logs
+*.log
+logs/
+
+# Configuration (contains credentials)
+config.yaml
+
+# AI Assistant Instructions (optional - keep private if desired)
+.github/copilot-instructions.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Reports
+*_report_*.txt
+
+# Temporary files
+*.tmp
+*.bak
+.temp/

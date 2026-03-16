@@ -1,0 +1,5 @@
+requests>=2.31.0
+PyYAML>=6.0
+
+# Optional: For AppInspect validation support (--validate flag)
+# splunk-appinspect>=4.0.0

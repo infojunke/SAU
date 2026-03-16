@@ -1,0 +1,32 @@
+# Auto-detect text files and normalize line endings
+* text=auto
+
+# Splunk app binary/non-text files - prevent line ending conversion
+*.rtf binary
+*.pdf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.bmp binary
+*.tgz binary
+*.gz binary
+*.tar binary
+*.zip binary
+*.spl binary
+*.pem binary
+*.der binary
+*.p12 binary
+*.pfx binary
+*.pyc binary
+*.pyo binary
+*.so binary
+*.dll binary
+*.exe binary
+*.whl binary
+
+# Splunk-specific: license/readme files that may be RTF
+*THIRDPARTY* binary
+*license*.rtf binary
+*LICENSE*.rtf binary

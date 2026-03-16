@@ -1,0 +1,239 @@
+# Example Configuration with Environment and Region Support
+#
+# This is an example config.yaml showing how to configure repositories
+# with environment and region metadata for precise filtering.
+
+# GitLab repository paths with metadata
+# Format: Each repo can have path, environment, region, and component
+gitlab_repos:
+  # ========== PRODUCTION REPOSITORIES ==========
+  
+  # Production East - Deployment Server
+  - path: "C:/repos/prod/east/splunk-ds-config"
+    environment: "prod"
+    region: "east"
+    component: "ds"
+  
+  # Production East - Search Head Cluster
+  - path: "C:/repos/prod/east/splunk-sh-config"
+    environment: "prod"
+    region: "east"
+    component: "shc"
+  
+  # Production East - Cluster Manager
+  - path: "C:/repos/prod/east/splunk-cm-config"
+    environment: "prod"
+    region: "east"
+    component: "cm"
+  
+  # Production West - Deployment Server
+  - path: "C:/repos/prod/west/splunk-ds-config"
+    environment: "prod"
+    region: "west"
+    component: "ds"
+  
+  # Production West - Search Head Cluster
+  - path: "C:/repos/prod/west/splunk-sh-config"
+    environment: "prod"
+    region: "west"
+    component: "shc"
+  
+  # Production West - Cluster Manager
+  - path: "C:/repos/prod/west/splunk-cm-config"
+    environment: "prod"
+    region: "west"
+    component: "cm"
+  
+  # ========== NON-PRODUCTION REPOSITORIES ==========
+  
+  # Non-Prod East - Deployment Server
+  - path: "C:/repos/nonprod/east/splunk-ds-config"
+    environment: "non-prod"
+    region: "east"
+    component: "ds"
+  
+  # Non-Prod East - Search Head Cluster
+  - path: "C:/repos/nonprod/east/splunk-sh-config"
+    environment: "non-prod"
+    region: "east"
+    component: "shc"
+  
+  # Non-Prod East - Cluster Manager
+  - path: "C:/repos/nonprod/east/splunk-cm-config"
+    environment: "non-prod"
+    region: "east"
+    component: "cm"
+  
+  # Non-Prod West - Deployment Server
+  - path: "C:/repos/nonprod/west/splunk-ds-config"
+    environment: "non-prod"
+    region: "west"
+    component: "ds"
+  
+  # Non-Prod West - Search Head Cluster
+  - path: "C:/repos/nonprod/west/splunk-sh-config"
+    environment: "non-prod"
+    region: "west"
+    component: "shc"
+  
+  # Non-Prod West - Cluster Manager
+  - path: "C:/repos/nonprod/west/splunk-cm-config"
+    environment: "non-prod"
+    region: "west"
+    component: "cm"
+  
+  # ========== SHARED REPOSITORIES ==========
+  # Shared repos are used across multiple environments
+  
+  # Shared Deployment Server (no region - used by all)
+  - path: "C:/repos/shared/splunk-ds-config"
+    environment: "shared"
+    component: "ds"
+  
+  # Shared Search Head Config (no region - used by all)
+  - path: "C:/repos/shared/splunk-sh-config"
+    environment: "shared"
+    component: "shc"
+  
+  # Shared Cluster Manager (no region - used by all)
+  - path: "C:/repos/shared/splunk-cm-config"
+    environment: "shared"
+    component: "cm"
+
+# Splunkbase credentials
+splunkbase_credentials:
+  username: "your_splunkbase_username"
+  password: "your_splunkbase_password"
+
+# Working directory
+work_directory: "./work"
+manual_download_directory: "./manual_downloads"
+
+# Deployment filtering configuration
+# Based on Splunk "First Full Instance" rule:
+#   - Universal Forwarders (DS): Data collection only (inputs.conf)
+#   - Heavy Forwarders (HF): Data collection + search capability (includes lookups, searches)
+#   - Indexers (CM): Index-time processing (props/transforms for parsing)
+#   - Search Heads (SHC): Search-time extractions and knowledge objects
+deployment:
+  # Files excluded from ALL component types
+  # These are never needed in Splunk deployments
+  global_excludes:
+    - "*.rtf"
+
+  # Universal Forwarders (DS repos)
+  forwarder_dirs:
+    - "bin"
+    - "default"
+    - "metadata"
+  
+  forwarder_excludes:
+    - "local"
+    - "lookups"
+    - "samples"
+    - "static"
+    - "appserver"
+    - "default/data"
+    - "default/savedsearches.conf"
+    - "default/views"
+    - "default/dashboards"
+    - "default/nav"
+    - "default/macros.conf"
+    - "default/eventtypes.conf"
+    - "default/tags.conf"
+    - "default/datamodels"
+    - "default/indexes.conf"
+  
+  # Heavy Forwarders (HF repos) - forwarders with search capability
+  heavy_forwarder_excludes:
+    - "local"
+    - "samples"
+    - "static"
+    - "appserver"
+    - "default/data/ui"
+    - "default/views"
+    - "default/dashboards"
+    - "default/nav"
+    - "default/indexes.conf"
+  
+  # Indexers (CM repos)
+  indexer_dirs:
+    - "bin"
+    - "default"
+    - "metadata"
+  
+  indexer_excludes:
+    - "local"
+    - "lookups"
+    - "samples"
+    - "static"
+    - "appserver"
+    - "default/data/ui"
+    - "default/savedsearches.conf"
+    - "default/views"
+    - "default/dashboards"
+    - "default/nav"
+    - "default/macros.conf"
+    - "default/eventtypes.conf"
+    - "default/tags.conf"
+    - "default/datamodels"
+    - "default/inputs.conf"
+  
+  # Search Heads (SHC repos)
+  searchhead_dirs:
+    - "bin"
+    - "default"
+    - "metadata"
+    - "local"
+    - "lookups"
+    - "static"
+    - "appserver"
+  
+  searchhead_excludes:
+    - "samples"
+    - "README"
+    - "default/inputs.conf"
+    - "default/indexes.conf"
+
+# Splunkbase ID mapping
+splunkbase_id_mapping:
+  Splunk_TA_windows: "742"
+  Splunk_TA_nix: "833"
+  Splunk_TA_aws: "1876"
+  Splunk_SA_CIM: "1621"
+
+# Git settings
+git_settings:
+  auto_commit: true
+  auto_push: false  # Set to true to automatically push branches to remote after creating them
+  commit_message_template: "Update {app_name} from v{old_version} to v{new_version}"
+  branch_prefix: "update"
+
+# ==========================================
+# USAGE EXAMPLES:
+# ==========================================
+#
+# Filter by environment:
+#   python splunk_app_updater.py --environment prod
+#   python splunk_app_updater.py --environment non-prod
+#   python splunk_app_updater.py --environment shared
+#
+# Filter by region:
+#   python splunk_app_updater.py --region east
+#   python splunk_app_updater.py --region west
+#
+# Combine filters:
+#   python splunk_app_updater.py --env prod --region east
+#   python splunk_app_updater.py --env non-prod --region west --component shc
+#   python splunk_app_updater.py --env shared --component ds
+#
+# Regional rollout:
+#   1. python splunk_app_updater.py --env non-prod --region east --interactive
+#   2. python splunk_app_updater.py --env non-prod --region west --interactive
+#   3. python splunk_app_updater.py --env prod --region east --interactive
+#   4. python splunk_app_updater.py --env prod --region west --interactive
+#
+# Update shared environment first:
+#   python splunk_app_updater.py --env shared --check-only
+#   python splunk_app_updater.py --env shared --interactive
+#
